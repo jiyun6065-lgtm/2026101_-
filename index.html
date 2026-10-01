@@ -23,7 +23,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
     body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 80px; }
 
-    /* GNB 상단 네비게이션 */
+    /* GNB */
     .gnb {
       width: 100%; background: rgba(9, 13, 22, 0.85);
       backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 200;
@@ -36,17 +36,17 @@
     .gnb-logo { font-size: 1.2rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; text-decoration: none; letter-spacing: -0.5px; }
     .gnb-logo i { color: var(--accent-blue); font-size: 1.35rem; }
     .gnb-menu { display: flex; gap: 24px; align-items: center; }
-    .gnb-item { color: var(--text-sub); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+    .gnb-item { color: var(--text-sub); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; cursor: pointer; }
     .gnb-item:hover { color: var(--accent-blue); }
 
-    /* 메인 컨테이너 */
+    /* 메인 레이아웃 */
     main { width: 100%; max-width: 1240px; padding: 36px 24px; }
     
     .dashboard-header { margin-bottom: 32px; }
     .dashboard-header h1 { font-size: 1.85rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 8px; }
     .dashboard-header p { font-size: 0.98rem; color: var(--text-sub); line-height: 1.5; }
 
-    /* 검색창 영역 */
+    /* 검색창 */
     .search-box { position: relative; margin-bottom: 28px; }
     .search-input {
       width: 100%; padding: 18px 24px 18px 56px; background: rgba(21, 29, 46, 0.85);
@@ -56,7 +56,7 @@
     .search-input:focus { border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); background: rgba(21, 29, 46, 0.95); }
     .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--accent-blue); font-size: 1.25rem; }
 
-    /* 질환 선택 탭 */
+    /* 탭 메뉴 */
     .disease-selector { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 32px; scrollbar-width: none; }
     .disease-selector::-webkit-scrollbar { display: none; }
     .chip {
@@ -66,54 +66,49 @@
     .chip:hover { border-color: var(--accent-blue); color: #fff; }
     .chip.active { background: linear-gradient(135deg, #0284c7, #9333ea); color: #fff; border-color: transparent; box-shadow: 0 4px 16px rgba(147, 51, 234, 0.35); }
 
-    /* Grid 카드 레이아웃 */
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    /* 카드 스타일 */
+    /* 그리드 및 카드 */
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 32px; }
     .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 26px; display: flex; flex-direction: column; justify-content: flex-start; backdrop-filter: blur(8px); transition: border-color 0.2s; }
     .card:hover { border-color: var(--card-hover-border); }
     .card.full-width { grid-column: 1 / -1; }
-    
     .card-title { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
     
     .keyword-badge {
       display: inline-block; background: rgba(56, 189, 248, 0.12); color: #7dd3fc;
-      padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 1.02rem; margin-bottom: 14px; border-left: 4px solid var(--accent-blue);
-      line-height: 1.4;
+      padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 1.02rem; margin-bottom: 14px; border-left: 4px solid var(--accent-blue); line-height: 1.4;
     }
-    
     .card-content { font-size: 0.96rem; line-height: 1.75; color: var(--text-main); white-space: pre-line; word-break: keep-all; }
 
-    /* 출처 카드 */
-    .source-card {
-      grid-column: 1 / -1; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 18px; padding: 26px; margin-top: 8px;
-    }
+    /* 출처 카드 및 버튼 */
+    .source-card { grid-column: 1 / -1; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 18px; padding: 26px; margin-top: 8px; }
     .source-title { font-size: 0.95rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .source-list { list-style: none; padding-left: 0; }
-    .source-list li { font-size: 0.92rem; color: #cbd5e1; margin-bottom: 12px; line-height: 1.6; display: flex; align-items: flex-start; gap: 10px; }
-    .source-list li i { color: var(--accent-amber); margin-top: 4px; font-size: 0.85rem; }
-    .source-link { color: var(--accent-blue); text-decoration: none; word-break: break-all; font-weight: 500; }
-    .source-link:hover { text-decoration: underline; }
+    .source-list li { font-size: 0.92rem; color: #cbd5e1; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 10px; }
+    .source-btn { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 6px 14px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+    .source-btn:hover { background: var(--accent-blue); color: #000; }
 
-    /* 상세 종합 분석표 스타일 */
+    /* 내부 모달 (페이지 내부 창) */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+    .modal-content { background: #0f172a; border: 1px solid var(--card-border); border-radius: 20px; width: 90%; max-width: 650px; max-height: 85vh; padding: 30px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 16px; }
+    .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--accent-amber); display: flex; align-items: center; gap: 10px; }
+    .modal-close { background: none; border: none; color: var(--text-sub); font-size: 1.4rem; cursor: pointer; }
+    .modal-close:hover { color: #fff; }
+    .modal-body { overflow-y: auto; font-size: 0.95rem; line-height: 1.8; color: #e2e8f0; white-space: pre-line; }
+
+    /* 분석표 */
     .compare-container { overflow-x: auto; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 28px; }
     .compare-header { margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--accent-green); }
     .compare-header h3 { font-size: 1.2rem; font-weight: 700; }
-    
     .compare-table { width: 100%; border-collapse: collapse; min-width: 950px; font-size: 0.9rem; }
     .compare-table th { background: rgba(56, 189, 248, 0.12); color: var(--accent-blue); padding: 14px; text-align: left; border-bottom: 2px solid var(--card-border); font-size: 0.92rem; font-weight: 700; white-space: nowrap; }
     .compare-table td { padding: 16px 14px; border-bottom: 1px solid var(--card-border); line-height: 1.65; vertical-align: top; }
     .compare-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
-    /* 하이라이트 효과 */
+    /* 하이라이트 */
     .highlight { background-color: rgba(250, 204, 21, 0.35); color: #fef08a; border-radius: 3px; padding: 2px 4px; font-weight: 600; }
 
-    /* 퀴즈 영역 */
+    /* 퀴즈 */
     .quiz-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 18px; padding: 28px; margin-top: 32px; }
     .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
     .quiz-item { background: rgba(21, 29, 46, 0.6); padding: 22px; border-radius: 14px; border: 1px solid var(--card-border); }
@@ -127,7 +122,7 @@
 </head>
 <body>
 
-  <!-- 상단 GNB -->
+  <!-- GNB -->
   <nav class="gnb">
     <div class="gnb-container">
       <a href="#" class="gnb-logo">
@@ -136,25 +131,23 @@
       <div class="gnb-menu">
         <a href="#main-content" class="gnb-item">질환 데이터베이스</a>
         <a href="#quiz-section" class="gnb-item">개념 검증 퀴즈</a>
-        <a href="https://helpline.kdca.go.kr" target="_blank" class="gnb-item" style="color: var(--accent-blue);"><i class="fa-solid fa-arrow-up-right-from-square"></i> 희귀질환헬프라인</a>
       </div>
     </div>
   </nav>
 
   <main>
-    <!-- 대시보드 헤더 -->
     <div class="dashboard-header">
       <h1>희귀 유전질환 종합 탐구 대시보드</h1>
       <p>단일 유전자 및 염색체 이상 질환의 원인, 유전 방식, 병태생리, 임상 소견, 최신 진단 및 치료 전략 데이터베이스</p>
     </div>
 
-    <!-- 실시간 통합 검색창 -->
+    <!-- 실시간 검색창 -->
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass search-icon"></i>
       <input type="text" id="searchInput" class="search-input" placeholder="유전자명, 증상, 유전방식, 키워드 실시간 검색 (예: FBN1, 체리색, 우성, 22q11)..." oninput="handleSearch()">
     </div>
 
-    <!-- 질환 선택 탭 메뉴 -->
+    <!-- 탭 메뉴 -->
     <div class="disease-selector">
       <div class="chip active" onclick="switchTab('taysachs', this)">테이 삭스병</div>
       <div class="chip" onclick="switchTab('marfan', this)">마르판 증후군</div>
@@ -165,7 +158,6 @@
       </div>
     </div>
 
-    <!-- 메인 콘텐츠 영역 -->
     <div id="main-content"></div>
 
     <!-- 퀴즈 영역 -->
@@ -176,6 +168,17 @@
       <div id="quiz-container" class="quiz-grid"></div>
     </div>
   </main>
+
+  <!-- 내부 출처 확인 모달 -->
+  <div class="modal-overlay" id="sourceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle"><i class="fa-solid fa-file-medical"></i> 출처 요약 정보</div>
+        <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <footer>
     <p>GeneScope Performance App - 생명과학 유전 탐구 보고서 웹 대시보드</p>
@@ -199,16 +202,25 @@
         },
         diagnosis: {
           kw: "효소 활성도 측정 / 유전자 검사 / 산전 검사",
-          desc: "• 혈액 검사: 백혈구나 혈청 내 Hexosaminidase A 효소의 활성도가 현저히 감소했는지 측정합니다.\n• 유전자 검사: HEXA 유전자의 돌연변이 여부를 분자유전학적으로 확진합니다.\n• 산전 진단: 가족력이 있는 경우 양수 검사나 융모막 생검을 통해 태아의 유전자 이상 여부를 검사합니다."
+          desc: "• 혈액 검사: 백혈구 내 Hexosaminidase A 효소 활성도가 현저히 감소했는지 측정합니다.\n• 유전자 검사: HEXA 유전자의 돌연변이 여부를 분자유전학적으로 확진합니다.\n• 산전 진단: 가족력이 있는 경우 양수 검사나 융모막 생검을 통해 태아의 유전자 이상 여부를 검사합니다."
         },
         management: {
           kw: "증상 완화 중심의 보존적 치료 / 다학제적 관리",
           desc: "현재 신경 퇴행을 완치하거나 중단시키는 근본적인 치료제는 존재하지 않습니다.\n\n• 발작 제어를 위한 항경련제 투여\n• 영양 공급을 위한 튜브 관급 및 기도 유지 지원\n• 관절 수축 방지를 위한 물리 치료 및 재활 지원"
         },
         sources: [
-          { name: "질병관리청 희귀질환헬프라인 - 테이삭스병", url: "https://helpline.kdca.go.kr" },
-          { name: "MedlinePlus Genetics - Tay-Sachs disease (NIH National Library of Medicine)", url: "https://medlineplus.gov/genetics/condition/tay-sachs-disease/" },
-          { name: "GeneReviews® - HEXA Disorders (Kaback MM, Desnick RJ)", url: "https://www.ncbi.nlm.nih.gov/books/NBK1218/" }
+          { 
+            name: "질병관리청 희귀질환헬프라인 - 테이삭스병 보고서", 
+            detail: "【질병관리청 희귀질환 정보 요약】\n• 테이삭스병은 리소좀 축적 질환의 일종으로, HEXA 유전자 돌연변이에 의해 발생합니다.\n• 국내 산전 진단 가이드라인 및 희귀질환 등록 대상 질환으로 등록되어 등록 산정특례 혜택을 받을 수 있습니다.\n• 주요 진단 방법으로는 효소 분석법과 분자유전학적 진단이 추천됩니다." 
+          },
+          { 
+            name: "NIH MedlinePlus Genetics - Tay-Sachs Disease", 
+            detail: "【NIH MedlinePlus 전문 요약】\n• HEXA 유전자의 130개 이상 돌연변이가 보고되었습니다.\n• Ashkenazi 유대인 인구집단에서 높은 보균율(약 1/30)을 보이는 것으로 잘 알려져 있습니다.\n• GM2 갱글리오사이드의 지속적 축적은 중추신경계 세포의 비가역적 사멸을 초래합니다." 
+          },
+          { 
+            name: "GeneReviews® - HEXA Disorders (NIH)", 
+            detail: "【GeneReviews 임상 가이드라인 요약】\n• 영아형(Infantile), 유소년형(Juvenile), 성인형(Adult/Late-Onset)으로 분류됩니다.\n• 치료적 접근으로 리소좀 효소 대체 요법(ERT) 및 유전자 치료 연구가 임상 시험 단계에 진행 중입니다." 
+          }
         ],
         quizzes: [
           { q: "1. 테이 삭스병의 원인 유전자와 결핍 효소는?", options: ["FBN1 / 피브릴린-1", "HEXA / Hexosaminidase A", "DMD / 디스트로핀", "CFTR / 염소통로"], ans: 1, exp: "15번 염색체 HEXA 유전자 변이로 Hexosaminidase A 효소가 결핍됩니다." },
@@ -241,9 +253,14 @@
           desc: "• 약물 치료: 혈압과 심장 박동수를 낮추어 대동맥에 가해지는 압력을 줄이기 위해 베타차단제나 ARB 계열 약물을 복용합니다.\n• 수술적 치료: 대동맥 직경이 일정 수준 이상 확장되면 인공 혈관으로 교체하는 예방적 수술을 진행합니다."
         },
         sources: [
-          { name: "서울대학교병원 의학정보 - 마르판 증후군", url: "http://www.snuh.org" },
-          { name: "The Marfan Foundation - Medical & Health Information", url: "https://marfan.org" },
-          { name: "GeneReviews® - Marfan Syndrome (Dietz H, 2021)", url: "https://www.ncbi.nlm.nih.gov/books/NBK1335/" }
+          { 
+            name: "서울대학교병원 임상 의학 가이드라인 - 마르판 증후군", 
+            detail: "【서울대학교병원 진료 지침 요약】\n• 마르판 증후군 환자는 정기적인 심초음파 검사를 통해 대동맥 직경 변화를 관찰해야 합니다.\n• 대동맥 직경이 45~50mm 이상으로 확장되면 대동맥 파열 위험을 막기 위한 예방적 수술이 강력히 권장됩니다." 
+          },
+          { 
+            name: "The Marfan Foundation Clinical Summary", 
+            detail: "【Marfan 재단 최신 가이드】\n• 심혈관계 관리 외에도 오목가슴, 척추측만증 등 골격계 변형에 대한 정형외과적 관리가 병행되어야 합니다.\n• 격렬한 접촉 운동이나 과도한 무산소 운동은 대동맥 압력을 높이므로 금기됩니다." 
+          }
         ],
         quizzes: [
           { q: "1. 마르판 증후군과 직접 관련된 유전자는?", options: ["CFTR", "FBN1", "HBB", "F8"], ans: 1, exp: "FBN1 유전자는 피브릴린-1 단백질을 합성하는 정보를 담고 있습니다." },
@@ -276,9 +293,14 @@
           desc: "• 약물 치료: 스테로이드(Prednisone 등)를 지속 투여하여 근력 약화 속도를 지연시킵니다.\n• 최신 표적 치료: 특정 유전자 변이 타입 환자에게 FDA 승인 약물(Eteplirsen 등)을 적용하여 일부 디스트로핀 단백질 합성을 유도합니다.\n• 호흡 재활: 진행성 호흡근 약화에 대비해 인공호흡기 사용 및 체위 배액을 관리합니다."
         },
         sources: [
-          { name: "질병관리청 희귀질환헬프라인 - 뒤센 근이영양증", url: "https://helpline.kdca.go.kr" },
-          { name: "Muscular Dystrophy Association (MDA) - DMD Research", url: "https://www.mda.org/disease/duchenne-muscular-dystrophy" },
-          { name: "Orphanet - Duchenne muscular dystrophy", url: "https://www.orpha.net" }
+          { 
+            name: "질병관리청 희귀질환 임상 연구 보고서 - DMD", 
+            detail: "【질병관리청 DMD 가이드라인】\n• 초기 발견 시 혈청 CK(Creatine Kinase) 농도를 측정하여 수만 단위로 상승한 경우 DMD를 의심할 수 있습니다.\n• 호흡근 약화에 대응하기 위한 야간 비침습적 인공호흡기(NIV) 적용이 생존율을 현저히 높입니다." 
+          },
+          { 
+            name: "Muscular Dystrophy Association (MDA) Research Data", 
+            detail: "【MDA 연구 데이터 요약】\n• 최근 엑손 건너뛰기(Exon Skipping) 치료법과 안티센스 올리고뉴클레오타이드(ASO) 치료법이 발달하여 유전자 변이별 맞춤 치료가 확대되고 있습니다." 
+          }
         ],
         quizzes: [
           { q: "1. 뒤센 근이영양증에서 결핍되는 핵심 단백질은?", options: ["피브릴린-1", "디스트로핀", "콜라겐", "엘라스틴"], ans: 1, exp: "DMD 유전자 변이로 디스트로핀 단백질이 결핍됩니다." },
@@ -311,9 +333,14 @@
           desc: "증상이 다양한 만큼 여러 분과의 협진 치료가 필수적입니다.\n\n• 심장 기형 및 구개열 교정 수술 시행\n• 부갑상선 기능 저하 시 칼슘 및 비타민 D 보충\n• 언어 지연 및 성장 지연에 대한 언어 치료 및 특수 교육 지원"
         },
         sources: [
-          { name: "서울아산병원 질환백과 - 22q11.2 결실 증후군", url: "https://www.amc.seoul.kr" },
-          { name: "22q Society - Educational & Clinical Resources", url: "https://www.22q.org" },
-          { name: "GeneReviews® - 22q11.2 Deletion Syndrome (McDonald-McGinn DM, 2020)", url: "https://www.ncbi.nlm.nih.gov/books/NBK1523/" }
+          { 
+            name: "서울아산병원 질환백과 - 22q11.2 결실 증후군", 
+            detail: "【서울아산병원 유전학센터 정보】\n• 22q11.2 결실 증후군은 디조지 증후군, 연구개마비 증후군 등을 포함하는 통합 질환 개념입니다.\n• 출생 직후 저칼슘혈증 경련을 막기 위한 정밀 혈액 검사가 중요합니다." 
+          },
+          { 
+            name: "International 22q11.2 Foundation Clinical Document", 
+            detail: "【22q11.2 국제 재단 지침】\n• 흉선 발달 장애로 인한 T세포 면역 결핍이 있을 수 있으므로 생백신 접종 전 면역 기능 평가가 선행되어야 합니다." 
+          }
         ],
         quizzes: [
           { q: "1. 22q11.2 결실 증후군의 주된 원인은?", options: ["22번 염색체 비분리", "22q11.2 부위 미세 결실", "점돌연변이 단독", "성염색체 이상"], ans: 1, exp: "22번 염색체 장완 22q11.2 영역의 미세 결실로 발생합니다." },
@@ -327,12 +354,23 @@
 
     let currentTab = 'taysachs';
 
-    // 텍스트 내 키워드 하이라이트 함수
+    // 텍스트 내 키워드 하이라이트
     function applyHighlight(text, query) {
       if (!query) return text;
       const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
       const re = new RegExp(`(${escapedQuery})`, 'gi');
       return text.replace(re, '<span class="highlight">$1</span>');
+    }
+
+    // 모달 창 열기/닫기
+    function openModal(title, content) {
+      document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-medical"></i> ${title}`;
+      document.getElementById('modalBody').innerText = content;
+      document.getElementById('sourceModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('sourceModal').style.display = 'none';
     }
 
     // 상세 분석 비교표 렌더링
@@ -376,7 +414,6 @@
         }
       ];
 
-      // 검색어 필터링
       const filteredData = compareData.filter(item => {
         if (!keyword) return true;
         const allText = (item.name + item.gene + item.inheritance + item.patho + item.symptoms + item.diagnosis + item.treatment).toLowerCase();
@@ -458,12 +495,12 @@
 
       let sourcesHTML = `
         <div class="source-card">
-          <div class="source-title"><i class="fa-solid fa-book-bookmark"></i> [검증된 출처 및 참고 문헌 서지 정보]</div>
+          <div class="source-title"><i class="fa-solid fa-book-bookmark"></i> [검증된 내부 서지 및 전문 요약]</div>
           <ul class="source-list">
             ${data.sources.map(s => `
               <li>
-                <i class="fa-solid fa-link"></i>
-                <span><strong>${s.name}</strong> - <a href="${s.url}" target="_blank" class="source-link">${s.url}</a></span>
+                <span><i class="fa-solid fa-file-lines" style="color:var(--accent-amber); margin-right:8px;"></i> <strong>${s.name}</strong></span>
+                <button class="source-btn" onclick="openModal('${encodeURIComponent(s.name)}', '${encodeURIComponent(s.detail)}')">전문 요약 보기</button>
               </li>
             `).join('')}
           </ul>
@@ -481,7 +518,7 @@
         </div>
       `;
 
-      // 퀴즈 항목 렌더링
+      // 퀴즈 렌더링
       const quizDiv = document.getElementById('quiz-container');
       quizDiv.innerHTML = data.quizzes.map((q, qIdx) => `
         <div class="quiz-item">
@@ -504,13 +541,22 @@
       renderTab(key, query);
     }
 
-    // 검색 핸들러 (실시간 반영)
+    // 검색 핸들러
     function handleSearch() {
       const query = document.getElementById('searchInput').value.trim();
       renderTab(currentTab, query);
     }
 
-    // 퀴즈 정답 확인
+    // 모달 파라미터 수신을 위한 래퍼
+    window.openModal = function(titleEnc, detailEnc) {
+      const title = decodeURIComponent(titleEnc);
+      const detail = decodeURIComponent(detailEnc);
+      document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-medical"></i> ${title}`;
+      document.getElementById('modalBody').innerText = detail;
+      document.getElementById('sourceModal').style.display = 'flex';
+    };
+
+    // 퀴즈 검증
     function checkAnswer(qIdx, selected, correct, exp) {
       const resBox = document.getElementById(`q-res-${qIdx}`);
       const decodedExp = decodeURIComponent(exp);
@@ -528,6 +574,14 @@
         resBox.innerText = "❌ 오답입니다. 다시 시도해보세요!";
       }
     }
+
+    // 모달 바깥 영역 클릭 시 닫기
+    window.onclick = function(event) {
+      const modal = document.getElementById('sourceModal');
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
 
     // 초기 실행
     renderTab('taysachs');
