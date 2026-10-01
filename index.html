@@ -3,326 +3,474 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>유전병 정보 제공 웹앱</title>
+  <title>GeneScope - 유전병 정보 제공 웹앱</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #3b82f6;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #1e293b;
-      --border-color: #e2e8f0;
+      --bg-main: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      padding: 20px;
-      line-height: 1.6;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 80px;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 30px;
+      width: 100%;
+      max-width: 650px;
       padding: 20px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    nav {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--card-border);
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .nav-btn {
-      padding: 10px 18px;
-      border: 1px solid var(--primary-color);
-      background-color: #fff;
-      color: var(--primary-color);
-      font-weight: bold;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .nav-btn.active, .nav-btn:hover {
-      background-color: var(--primary-color);
-      color: #fff;
-    }
-
-    .content-card {
-      display: none;
-      background: var(--card-bg);
-      padding: 25px;
+    .badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      max-width: 900px;
-      margin: 0 auto;
     }
 
-    .content-card.active {
-      display: block;
+    main {
+      width: 100%;
+      max-width: 650px;
+      padding: 20px;
     }
 
-    h2 {
-      color: var(--primary-color);
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 8px;
+    .disease-selector {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
       margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+    .disease-selector::-webkit-scrollbar { display: none; }
+
+    .chip {
+      padding: 10px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      color: var(--text-sub);
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
+    .chip.active {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
     }
 
-    .info-box {
-      background: #f1f5f9;
-      padding: 15px;
-      border-radius: 8px;
-      border-left: 4px solid var(--primary-color);
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
     }
 
-    .info-box h3 {
-      font-size: 1rem;
-      margin-bottom: 6px;
+    .card-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      white-space: pre-line;
     }
 
     /* 퀴즈 섹션 */
-    .quiz-section {
-      margin-top: 30px;
+    .quiz-card {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--accent-purple);
+      border-radius: 16px;
       padding: 20px;
-      background: #eff6ff;
-      border-radius: 10px;
-      border: 1px solid #bfdbfe;
+      margin-top: 25px;
     }
 
-    .quiz-option {
-      display: block;
+    .quiz-item {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed var(--card-border);
+    }
+    .quiz-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .quiz-q {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .quiz-btn {
       width: 100%;
+      padding: 10px 14px;
+      margin-top: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
       text-align: left;
-      padding: 10px;
-      margin: 8px 0;
-      background: #fff;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
+      font-size: 0.88rem;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .quiz-option:hover {
-      background: #e2e8f0;
+    .quiz-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-blue);
     }
 
-    .quiz-result {
-      margin-top: 10px;
+    .result-box {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
       font-weight: bold;
+      display: none;
+      line-height: 1.4;
     }
 
     footer {
+      width: 100%;
+      max-width: 650px;
       text-align: center;
-      margin-top: 40px;
-      font-size: 0.85rem;
-      color: #64748b;
+      padding: 20px;
+      color: var(--text-sub);
+      font-size: 0.8rem;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>유전병 정보 제공 웹앱</h1>
-    <p>주요 유전 질환의 원인, 유전 방식, 증상 및 진단·치료법 안내</p>
+    <div class="logo">
+      <i class="fa-solid fa-dna"></i> GeneScope
+    </div>
+    <span class="badge">수행평가 웹앱</span>
   </header>
 
-  <!-- 탭 메뉴 -->
-  <nav>
-    <button class="nav-btn active" onclick="openTab('marfan')">마르판 증후군</button>
-    <button class="nav-btn" onclick="openTab('taysachs')">테이 삭스병</button>
-    <button class="nav-btn" onclick="openTab('duchenne')">뒤센 근이영양증</button>
-    <button class="nav-btn" onclick="openTab('diGeorge')">22q11.2 결실 증후군</button>
-  </nav>
-
-  <!-- 1. 마르판 증후군 -->
-  <div id="marfan" class="content-card active">
-    <h2>마르판 증후군 (Marfan Syndrome)</h2>
-    <div class="info-grid">
-      <div class="info-box">
-        <h3>유전적 원인</h3>
-        <p>15번 염색체 $FBN1$ 유전자 돌연변이로 결합조직 구성 단백질인 피브릴린-1 결핍.</p>
-      </div>
-      <div class="info-box">
-        <h3>유전 방식</h3>
-        <p>상염색체 우성 유전 (단일 유전자 유전, 대립유전자 1개만 있어도 발현).</p>
-      </div>
-      <div class="info-box">
-        <h3>주요 증상</h3>
-        <p>키가 크고 팔다리가 김, 척추측만증, 수정체 탈구, 대아올림 확장 및 동맥류 위험.</p>
-      </div>
-      <div class="info-box">
-        <h3>진단 및 치료</h3>
-        <p>유전자 검사 및 심초음파 진단. 베타블로커 복용(혈압 관리), 심혈관계 수술 및 보존적 치료.</p>
-      </div>
+  <main>
+    <div class="disease-selector">
+      <div class="chip active" onclick="switchDisease('taysachs', this)">테이 삭스병</div>
+      <div class="chip" onclick="switchDisease('marfan', this)">마르판 증후군</div>
+      <div class="chip" onclick="switchDisease('duchenne', this)">뒤센 근이영양증</div>
+      <div class="chip" onclick="switchDisease('diGeorge', this)">22q11.2 결실 증후군</div>
     </div>
 
-    <!-- 퀴즈 영역 -->
-    <div class="quiz-section">
-      <h3>💡 상호작용 개념 퀴즈</h3>
-      <p id="q-marfan-text">Q. 마르판 증후군의 유전 방식은 무엇일까요? (임시 질문)</p>
-      <button class="quiz-option" onclick="checkQuiz('marfan', 1)">1. 상염색체 우성 유전</button>
-      <button class="quiz-option" onclick="checkQuiz('marfan', 2)">2. 상염색체 열성 유전</button>
-      <button class="quiz-option" onclick="checkQuiz('marfan', 3)">3. 반성 열성 유전</button>
-      <div id="q-marfan-result" class="quiz-result"></div>
-    </div>
-  </div>
+    <div id="disease-info"></div>
 
-  <!-- 2. 테이 삭스병 -->
-  <div id="taysachs" class="content-card">
-    <h2>테이 삭스병 (Tay-Sachs Disease)</h2>
-    <div class="info-grid">
-      <div class="info-box">
-        <h3>유전적 원인</h3>
-        <p>15번 염색체 $HEXA$ 유전자 돌연변이로 Hexosaminidase A 효소 결핍, GM2 갱글리오사이드 지질 축적.</p>
+    <div class="quiz-card">
+      <div class="card-title" style="color: var(--accent-purple);">
+        <i class="fa-solid fa-gamepad"></i> 상호작용 개념 검증 퀴즈 (5문항)
       </div>
-      <div class="info-box">
-        <h3>유전 방식</h3>
-        <p>상염색체 열성 유전 (열성 동형접합 $tt$일 때 발현, 보균자 부모 간 발병률 25%).</p>
-      </div>
-      <div class="info-box">
-        <h3>주요 증상</h3>
-        <p>망막 체리색 반점(Cherry-red spot), 근력 약화, 소리 과민 반응, 신경계 퇴행 및 시청력 상실.</p>
-      </div>
-      <div class="info-box">
-        <h3>진단 및 치료</h3>
-        <p>효소 활성도 측정 및 유전자 검사. 완치제 없음 (증상 완화 및 보존적 치료).</p>
-      </div>
+      <div id="quiz-container"></div>
     </div>
+  </main>
 
-    <!-- 퀴즈 영역 -->
-    <div class="quiz-section">
-      <h3>💡 상호작용 개념 퀴즈</h3>
-      <p id="q-taysachs-text">Q. 테이 삭스병의 대표적인 안과적 특징은 무엇일까요? (임시 질문)</p>
-      <button class="quiz-option" onclick="checkQuiz('taysachs', 1)">1. 수정체 혼탁</button>
-      <button class="quiz-option" onclick="checkQuiz('taysachs', 2)">2. 망막 체리색 반점</button>
-      <button class="quiz-option" onclick="checkQuiz('taysachs', 3)">3. 야맹증</button>
-      <div id="q-taysachs-result" class="quiz-result"></div>
-    </div>
-  </div>
-
-  <!-- 3. 뒤센 근이영양증 -->
-  <div id="duchenne" class="content-card">
-    <h2>뒤센 근이영양증 (Duchenne Muscular Dystrophy)</h2>
-    <div class="info-grid">
-      <div class="info-box">
-        <h3>유전적 원인</h3>
-        <p>X 염색체 $DMD$ 유전자 돌연변이로 근육 유지에 필수적인 디스트로핀(Dystrophin) 단백질 합성 불가.</p>
-      </div>
-      <div class="info-box">
-        <h3>유전 방식</h3>
-        <p>반성 열성 유전 (X 염색체 유전, 주로 남성에게 발현).</p>
-      </div>
-      <div class="info-box">
-        <h3>주요 증상</h3>
-        <p>유아기 보행 장애, 종아리 가성 비대, 가버스 징후(손으로 몸을 짚고 일어남), 진행성 근육 위축.</p>
-      </div>
-      <div class="info-box">
-        <h3>진단 및 치료</h3>
-        <p>혈청 CK(크레아틴 키나아제) 수치 측정 및 유전자 검사. 스테로이드제 투여 및 물리 치료.</p>
-      </div>
-    </div>
-
-    <!-- 퀴즈 영역 -->
-    <div class="quiz-section">
-      <h3>💡 상호작용 개념 퀴즈</h3>
-      <p id="q-duchenne-text">Q. 뒤센 근이영양증의 유전 방식은 무엇일까요? (임시 질문)</p>
-      <button class="quiz-option" onclick="checkQuiz('duchenne', 1)">1. 반성 열성 유전</button>
-      <button class="quiz-option" onclick="checkQuiz('duchenne', 2)">2. 상염색체 우성 유전</button>
-      <button class="quiz-option" onclick="checkQuiz('duchenne', 3)">3. 염색체 구조 이상</button>
-      <div id="q-duchenne-result" class="quiz-result"></div>
-    </div>
-  </div>
-
-  <!-- 4. 22q11.2 결실 증후군 -->
-  <div id="diGeorge" class="content-card">
-    <h2>22q11.2 결실 증후군 (디조지 증후군)</h2>
-    <div class="info-grid">
-      <div class="info-box">
-        <h3>유전적 원인</h3>
-        <p>22번 염색체 긴 팔(q11.2) 미세 결실로 인한 염색체 구조 이상 (여러 유전자 손실).</p>
-      </div>
-      <div class="info-box">
-        <h3>유전 방식</h3>
-        <p>상염색체 우성 양상 (대부분 돌연변이로 새로 발생하나 유전 시 50% 확률).</p>
-      </div>
-      <div class="info-box">
-        <h3>주요 증상</h3>
-        <p>선천성 심장 질환, 입천장 갈림증(구개열), 흉선 발달 저하(면역 결핍), 부갑상샘 저하증(저칼슘혈증).</p>
-      </div>
-      <div class="info-box">
-        <h3>진단 및 치료</h3>
-        <p>FISH 검사 및 마이크로어레이 유전자 검사. 심장 수술, 면역 치료, 칼슘 보충 등 다학제 치료.</p>
-      </div>
-    </div>
-
-    <!-- 퀴즈 영역 -->
-    <div class="quiz-section">
-      <h3>💡 상호작용 개념 퀴즈</h3>
-      <p id="q-diGeorge-text">Q. 22q11.2 결실 증후군의 주요 원인은 무엇일까요? (임시 질문)</p>
-      <button class="quiz-option" onclick="checkQuiz('diGeorge', 1)">1. 유전자 염기 치환</button>
-      <button class="quiz-option" onclick="checkQuiz('diGeorge', 2)">2. 22번 염색체 일부 결실</button>
-      <button class="quiz-option" onclick="checkQuiz('diGeorge', 3)">3. 염색체 수 이상</button>
-      <div id="q-diGeorge-result" class="quiz-result"></div>
-    </div>
-  </div>
-
-  <!-- 출처 및 제출 정보 -->
   <footer>
-    <p>출처: 서울대학교병원 의학정보, 질병관리청 희귀질환헬프라인</p>
-    <p>제작자: [학번 조장이름]</p>
+    <p>생물의 유전 수행평가 | 유전병 정보 제공 웹앱 프로젝트</p>
+    <p style="font-size: 0.75rem; margin-top: 4px; color: #64748b;">
+      출처: 질병관리청 희귀질환헬프라인, 서울대학교병원 의학정보, GeneReviews®, MedlinePlus
+    </p>
   </footer>
 
   <script>
-    // 탭 전환 기능
-    function openTab(tabId) {
-      const cards = document.querySelectorAll('.content-card');
-      const buttons = document.querySelectorAll('.nav-btn');
-
-      cards.forEach(card => card.classList.remove('active'));
-      buttons.forEach(btn => btn.classList.remove('active'));
-
-      document.getElementById(tabId).classList.add('active');
-      event.currentTarget.classList.add('active');
-    }
-
-    // 임시 퀴즈 채점 정답 데이터 (나중에 정답 번호를 수정하세요)
-    const answers = {
-      marfan: 1,
-      taysachs: 2,
-      duchenne: 1,
-      diGeorge: 2
+    const diseases = {
+      taysachs: {
+        title: "테이 삭스병 (Tay-Sachs Disease)",
+        cause: "15번 염색체 HEXA 유전자 돌연변이로 Hexosaminidase A 효소 결핍.\n지질 분해 이상으로 GM2 갱글리오사이드가 뇌 및 신경 세포에 축적되어 손상 유발.",
+        inheritance: "상염색체 열성 유전 (단일 유전자 유전)\n- 열성 동형접합(tt) 시 발현\n- 부모가 모두 보균자(Tt)일 경우 자녀 발병 확률 25%",
+        symptoms: "• 발병 시기별 분류:\n 1) 영아형: 생후 3~6개월 시작, 근력 약화, 소리 과민 반응, 망막 체리색 반점(Cherry-red spot), 급격한 신경계 퇴행.\n 2) 유소년형: 2~10세 발병, 운동 조절 상실 및 지능 저하.\n 3) 성인형: 청소년기~성인기 발병, 진행이 느리며 정신과적 증상 동반.",
+        diagnosis: "• 혈액 검사: Hexosaminidase A 효소 활성도 측정\n• 유전자 검사: HEXA 유전자 변이 확인\n• 산전 진단: 양수 검사 및 융모막 생검",
+        management: "현재 근본적인 완치법은 없으며, 발작 조절, 영양 공급, 물리 치료 등 증상 완화를 위한 보존적(지원적) 치료 시행.",
+        quizzes: [
+          {
+            q: "1. 테이 삭스병의 유전적 원인 유전자와 결핍되는 효소는?",
+            options: ["FBN1 유전자 / 피브릴린-1", "HEXA 유전자 / Hexosaminidase A", "DMD 유전자 / 디스트로핀", "CFTR 유전자 / 염소통로"],
+            ans: 1,
+            exp: "15번 염색체 HEXA 유전자 변이로 Hexosaminidase A 효소가 결핍됩니다."
+          },
+          {
+            q: "2. 테이 삭스병의 유전 방식에 대한 설명으로 옳은 것은?",
+            options: ["상염색체 우성 유전", "반성 열성 유전", "상염색체 열성 유전", "성염색체 우성 유전"],
+            ans: 2,
+            exp: "상염색체 열성 유전으로, 동형접합(tt)일 때 질환이 발현됩니다."
+          },
+          {
+            q: "3. 영아형 테이 삭스병의 대표적인 안과적 특징 소견은?",
+            options: ["수정체 탈구", "망막 체리색 반점 (Cherry-red spot)", "백내장", "황반변성"],
+            ans: 1,
+            exp: "망막 중심부에 뚜렷한 체리색 반점(Cherry-red spot)이 관찰됩니다."
+          },
+          {
+            q: "4. 보균자(Tt) 부모 사이에서 테이 삭스병 자녀가 태어날 확률은?",
+            options: ["0%", "25%", "50%", "75%"],
+            ans: 1,
+            exp: "부모가 모두 이형접합(Tt)일 때 자녀가 열성 동형접합(tt)일 확률은 25%입니다."
+          },
+          {
+            q: "5. 테이 삭스병의 치료 및 관리에 관한 설명으로 알맞은 것은?",
+            options: ["유전자 치료로 완전 완치 가능", "근본 완치법이 없어 보존적 치료 시행", "약물 복용으로 효소 완전 복구", "치료가 불필요한 경미한 질환"],
+            ans: 1,
+            exp: "완치 치료법은 존재하지 않으며 발작 조절, 영양 공급 등 보존적 치료를 시행합니다."
+          }
+        ]
+      },
+      marfan: {
+        title: "마르판 증후군 (Marfan Syndrome)",
+        cause: "15번 염색체 FBN1 유전자 병원성 변이.\n피브릴린-1(fibrillin-1) 단백질 이상으로 미세섬유(microfibril) 형성 및 결합조직 조절 기능 장애 발생.",
+        inheritance: "상염색체 우성 유전 (단일 유전자 유전)\n- 부모에게서 유전되는 경우(약 75%)와 새로운 돌연변이(de novo, 최소 25%)에 의해 발생하는 경우가 모두 존재.",
+        symptoms: "• 심혈관계: 대동맥 근부 확장, 대동맥류 및 대동맥 박리 위험.\n• 눈: 근시 및 수정체 탈구(ectopia lentis).\n• 골격계: 긴 팔다리와 손가락, 척추측만증, 흉곽 변형.",
+        diagnosis: "임상적 특징(대동맥 확장, 수정체 탈구, 전신 소견), 가족력, 심초음파 평가 및 FBN1 분자유전학적 검사를 종합하여 진단.",
+        management: "• 약물 치료: 혈압 및 대동맥 부담을 줄이기 위한 베타차단제(beta-blocker) 또는 ARB 투여.\n• 정기적 추적 관찰 및 필요 시 예방적 대동맥 수술 시행.",
+        quizzes: [
+          {
+            q: "1. 마르판 증후군과 가장 직접적으로 관련된 유전자는?",
+            options: ["CFTR", "FBN1", "HBB", "F8"],
+            ans: 1,
+            exp: "FBN1 유전자는 피브릴린-1 단백질을 합성하는 정보를 담고 있습니다."
+          },
+          {
+            q: "2. 마르판 증후군의 유전 방식은?",
+            options: ["상염색체 열성", "X염색체 우성", "상염색체 우성", "X염색체 열성"],
+            ans: 2,
+            exp: "상염색체 우성 방식으로 유전됩니다."
+          },
+          {
+            q: "3. '가족력이 없는 사람에게는 마르판 증후군이 발생할 수 없다'는 맞는 설명인가요?",
+            options: ["O (맞음)", "X (틀림)"],
+            ans: 1,
+            exp: "새로운(de novo) FBN1 변이로 인해 가족력 없이도 발생할 수 있습니다."
+          },
+          {
+            q: "4. 다음 중 마르판 증후군의 대표적 특징으로 보기 어려운 것은?",
+            options: ["수정체 탈구", "대동맥 근부 확장", "척추측만증", "점도가 높은 점액 축적"],
+            ans: 3,
+            exp: "점도 높은 점액 축적은 낭성 섬유증의 특징입니다."
+          },
+          {
+            q: "5. 마르판 증후군의 올바른 진단 및 관리 방법은?",
+            options: ["외형만으로 진단함", "진단 후 관리 불필요", "유전자 검사 1개로만 단독 진단", "임상 소견과 가족력을 종합 판단하고 지속적 다학제 관리 시행"],
+            ans: 3,
+            exp: "임상적 특징, 가족력, 유전자 검사 등을 종합하여 판단하며 진단 후 지속적 관리가 필수적입니다."
+          }
+        ]
+      },
+      duchenne: {
+        title: "뒤센 근이영양증 (Duchenne Muscular Dystrophy)",
+        cause: "X 염색체 p21 위치 DMD 유전자 결함 (결실 65%, 중복 5~10%, 점돌연변이 등).\n디스트로핀(dystrophin) 단백질 결핍으로 골격근이 손상되고 지방 및 결합조직으로 대체됨.",
+        inheritance: "X 염색체 연관 열성 유전 (반성 열성 유전)\n- X 염색체가 1개인 남성에게 주로 발병.\n- 여성은 주로 보인자가 되며 자녀에게 물려줄 수 있음.",
+        symptoms: "• 초기(2~3세): 근위부 근육 약화, 보행 장애, 손으로 몸을 짚고 일어나는 가버스 징후, 종아리 가성비대.\n• 진행 시: 척추측만증, 심장 및 호흡기 근육 영향으로 급성 호흡 장애 위험.",
+        diagnosis: "• 혈청 효소 검사: CK(크레아틴 키나아제) 수치 현저히 상승.\n• 근전도, 근생검, 면역조직화학 검사(디스트로핀 유무 확인), DNA 분석.",
+        management: "완치법은 없으나 스테로이드 투여, 물리 치료 및 FDA 승인 약물(Exondys 51, Vyondys 53 등 엑손 건너뛰기 약물) 활용.",
+        quizzes: [
+          {
+            q: "1. 듀센 근이영양증(DMD)의 유전적 원인 단백질 결핍은?",
+            options: ["피브릴린-1", "디스트로핀 (dystrophin)", "콜라겐", "엘라스틴"],
+            ans: 1,
+            exp: "DMD 유전자 변이로 근육 구조 유지에 필수적인 디스트로핀 단백질이 결핍됩니다."
+          },
+          {
+            q: "2. DMD의 유전 방식 및 주요 발병 대상은?",
+            options: ["상염색체 우성 / 남녀 동일", "X 염색체 연관 열성 / 주로 남성", "Y 염색체 유전 / 남성 전용", "상염색체 열성 / 주로 여성"],
+            ans: 1,
+            exp: "X 염색체 연관 열성 유전으로 남성에게 훨씬 흔하게 나타납니다."
+          },
+          {
+            q: "3. DMD의 증상에 대한 설명으로 틀린 것은?",
+            options: ["근위부 근육부터 시작됨", "종아리 가성비대 관찰 가능", "진행되어도 호흡기 근육에는 영향을 주지 않음", "점프나 달리기 어려움"],
+            ans: 2,
+            exp: "진행 시 심장과 호흡기 근육에도 큰 영향을 미칩니다."
+          },
+          {
+            q: "4. DMD 진단 시 혈액 검사에서 매우 높게 관찰되는 근육 효소는?",
+            options: ["CK (크레아틴 키나아제)", "인슐린", "알부민", "헤모글로빈"],
+            ans: 0,
+            exp: "근육 손상으로 인해 혈청 CK 수치가 매우 높게 측정됩니다."
+          },
+          {
+            q: "5. DMD의 현재 치료 및 연구 현황은?",
+            options: ["단번에 치료 가능한 완치약 존재", "스테로이드 및 엑손 건너뛰기 표적 약물 등 치료제 활용 및 연구 중", "물리치료 금지", "약물 승인 사례 없음"],
+            ans: 1,
+            exp: "완치법은 없으나 스테로이드제 및 FDA 승인을 받은 표적 치료제(엑손 건너뛰기 약물) 등이 활용됩니다."
+          }
+        ]
+      },
+      diGeorge: {
+        title: "22q11.2 결실 증후군 (디조지 증후군)",
+        cause: "22번 염색체 긴 팔 근위부(22q11.2) 유전 물질의 미세 결실로 발생.",
+        inheritance: "상염색체 우성 양상 유전\n- 90% 이상은 부모에게서 물려받지 않은 de novo(신규) 결실로 발생.\n- 약 10%는 유전되며, 결실이 있는 부모가 자녀에게 전달할 확률은 50%.",
+        symptoms: "• 심장 기형: 대동맥궁 이상, Fallot 4징, 심실 중격 결손 등.\n• 안면 및 구강: 구개열(입천장 갈림증), 긴 코, 짧은 인중, 작은 턱.\n• 기타: 부갑상선기능저하에 따른 저칼슘혈증, 흉선 발달 저하(면역 결핍), 성장 및 발달 지연.",
+        diagnosis: "임상 평가, 세포유전학적 고정도분염법(15~20%), 형광동소보합(FISH) 검사(80~90% 진단), 염색체 마이크로어레이 검사.",
+        management: "근본적 완치법은 없으나 증상에 따라 심장 수술, 언어/물리 치료, 면역 치료, 칼슘 보충, 특수 교육 등 다학제적 관리 시행.",
+        quizzes: [
+          {
+            q: "1. 22q11.2 결실 증후군의 주된 유전적 원인은?",
+            options: ["22번 염색체 전체 비분리", "22q11.2 부위 미세 결실", "점돌연변이 단독 발생", "성염색체 수 이상"],
+            ans: 1,
+            exp: "22번 염색체 장완 근위부(22q11.2)의 미세 결실로 발생합니다."
+          },
+          {
+            q: "2. 22q11.2 결실 증후군의 유전 패턴 특징은?",
+            options: ["100% 부모 유전", "상염색체 우성 양상 (90% 이상은 de novo 신규 발생)", "반성 열성 유전", "열성 유전"],
+            ans: 1,
+            exp: "상염색체 우성 방식으로 유전되나 90% 이상은 돌연변이(de novo)로 새로 발생합니다."
+          },
+          {
+            q: "3. 22q11.2 결실 증후군에서 관찰되는 주요 증상이 아닌 것은?",
+            options: ["선천성 심장 기형", "구개열(입천장 갈림증)", "저칼슘혈증", "과도한 근육 단백질 생성"],
+            ans: 3,
+            exp: "심장 기형, 구개열, 저칼슘혈증, 면역 이상 등이 주요 증상입니다."
+          },
+          {
+            q: "4. 22q11.2 결실 증후군을 80~90% 정밀하게 진단할 수 있는 유전자 검사법은?",
+            options: ["형광동소보합 (FISH) 검사", "단순 혈액형 검사", "X-ray 촬영", "심초음파 단독 검사"],
+            ans: 0,
+            exp: "22q11.2 유전자 소식자를 이용한 FISH 검사 시 80~90%가 진단됩니다."
+          },
+          {
+            q: "5. 22q11.2 결실 증후군의 올바른 치료 방향은?",
+            options: ["단일 약물 완치", "치료 완전 불가능하여 개입 안 함", "증상별 수술, 물리치료, 칼슘 보충 등 다학제적 관리", "심장 수술 절대 금지"],
+            ans: 2,
+            exp: "완치법은 없으나 심장 수술, 면역/언어 치료 등 다학제적 맞춤 관리를 진행합니다."
+          }
+        ]
+      }
     };
 
-    // 퀴즈 채점 함수
-    function checkQuiz(disease, selectedOption) {
-      const resultDiv = document.getElementById(`q-${disease}-result`);
-      if (selectedOption === answers[disease]) {
-        resultDiv.style.color = "green";
-        resultDiv.innerText = "⭕ 정답입니다!";
+    let currentKey = 'taysachs';
+
+    function renderContent(key) {
+      const data = diseases[key];
+      const infoDiv = document.getElementById('disease-info');
+
+      infoDiv.innerHTML = `
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-disease"></i> 질환명</div>
+          <div class="card-content" style="font-weight:bold; font-size:1.1rem; color: var(--accent-blue);">${data.title}</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-dna"></i> 1. 유전적 원인</div>
+          <div class="card-content">${data.cause}</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-sitemap"></i> 2. 유전 방식</div>
+          <div class="card-content">${data.inheritance}</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-stethoscope"></i> 3. 주요 증상 및 특징</div>
+          <div class="card-content">${data.symptoms}</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-microscope"></i> 4. 진단 방법</div>
+          <div class="card-content">${data.diagnosis}</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-kit-medical"></i> 5. 치료 및 관리 방법</div>
+          <div class="card-content">${data.management}</div>
+        </div>
+      `;
+
+      // 퀴즈 5문항 렌더링
+      const quizDiv = document.getElementById('quiz-container');
+      quizDiv.innerHTML = data.quizzes.map((q, qIdx) => `
+        <div class="quiz-item">
+          <div class="quiz-q">${q.q}</div>
+          ${q.options.map((opt, oIdx) => `
+            <button class="quiz-btn" onclick="checkAnswer(${qIdx},${oIdx}, ${q.ans}, '${encodeURIComponent(q.exp)}')">
+              ${oIdx + 1}.${opt}
+            </button>
+          `).join('')}
+          <div id="q-res-${qIdx}" class="result-box"></div>
+        </div>
+      `).join('');
+    }
+
+    function switchDisease(key, el) {
+      currentKey = key;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderContent(key);
+    }
+
+    function checkAnswer(qIdx, selected, correct, exp) {
+      const resBox = document.getElementById(`q-res-${qIdx}`);
+      const decodedExp = decodeURIComponent(exp);
+      resBox.style.display = "block";
+
+      if (selected === correct) {
+        resBox.style.background = "rgba(34, 197, 94, 0.2)";
+        resBox.style.color = "#4ade80";
+        resBox.style.border = "1px solid rgba(34, 197, 94, 0.4)";
+        resBox.innerHTML = `⭕ 정답입니다!<br><span style="font-weight:normal; font-size:0.8rem; color:#cbd5e1;">💡 해설: ${decodedExp}</span>`;
       } else {
-        resultDiv.style.color = "red";
-        resultDiv.innerText = "❌ 오답입니다. 다시 시도해 보세요.";
+        resBox.style.background = "rgba(239, 68, 68, 0.2)";
+        resBox.style.color = "#f87171";
+        resBox.style.border = "1px solid rgba(239, 68, 68, 0.4)";
+        resBox.innerText = "❌ 오답입니다. 다시 도전해 보세요!";
       }
     }
+
+    // 초기 실행
+    renderContent('taysachs');
   </script>
 </body>
 </html>
