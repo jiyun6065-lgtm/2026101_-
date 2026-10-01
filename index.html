@@ -15,7 +15,6 @@
       --accent-purple: #c084fc;
       --accent-green: #34d399;
       --accent-amber: #fbbf24;
-      --accent-red: #f87171;
       --text-main: #f1f5f9;
       --text-sub: #94a3b8;
       --text-muted: #64748b;
@@ -90,16 +89,6 @@
     
     .card-content { font-size: 0.96rem; line-height: 1.75; color: var(--text-main); white-space: pre-line; word-break: keep-all; }
 
-    /* DNA 시뮬레이터 전용 스타일 */
-    .dna-sim-card { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 18px; padding: 28px; margin-bottom: 24px; }
-    .dna-block-container { display: flex; flex-wrap: wrap; gap: 8px; font-family: monospace; font-size: 0.95rem; margin-top: 10px; }
-    .codon-box { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; text-align: center; }
-    .codon-box.mutated { background: rgba(248, 113, 113, 0.2); border-color: var(--accent-red); }
-    .seq-dna { font-weight: bold; color: var(--accent-blue); font-size: 1.05rem; letter-spacing: 1px; }
-    .seq-mrna { color: var(--accent-purple); font-size: 0.9rem; }
-    .seq-aa { color: var(--accent-green); font-size: 0.85rem; font-weight: bold; margin-top: 4px; }
-    .seq-aa.stop { color: var(--accent-red); }
-
     /* 출처 카드 */
     .source-card {
       grid-column: 1 / -1; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 18px; padding: 26px; margin-top: 8px;
@@ -156,7 +145,7 @@
     <!-- 대시보드 헤더 -->
     <div class="dashboard-header">
       <h1>희귀 유전질환 종합 탐구 대시보드</h1>
-      <p>단일 유전자 및 염색체 이상 질환의 원인, 유전 방식, DNA 시뮬레이션, 임상 소견 데이터베이스</p>
+      <p>단일 유전자 및 염색체 이상 질환의 원인, 유전 방식, 병태생리, 임상 소견, 최신 진단 및 치료 전략 데이터베이스</p>
     </div>
 
     <!-- 실시간 통합 검색창 -->
@@ -193,22 +182,9 @@
   </footer>
 
   <script>
-    // 코돈 번역 매핑 테이블 (Central Dogma)
-    const codonTable = {
-      'AUG': 'Met (시작)', 'UAC': 'Tyr', 'UUU': 'Phe', 'UUC': 'Phe',
-      'TATC': 'TATC(변이)', 'UAA': 'STOP (종결)', 'UAG': 'STOP (종결)', 'UGA': 'STOP (종결)',
-      'GAC': 'Asp', 'GUC': 'Val', 'GGU': 'Gly', 'GGC': 'Gly', 'GAG': 'Glu',
-      'CCC': 'Pro', 'CCU': 'Pro', 'AAG': 'Lys', 'AGA': 'Arg', 'CUG': 'Leu'
-    };
-
     const diseases = {
       taysachs: {
         title: "테이 삭스병 (Tay-Sachs Disease)",
-        dnaSeq: {
-          normal: ["ATG", "GAC", "UAC", "UUC", "GAG"],
-          mutated: ["ATG", "GAC", "TATC", "UAC", "UUC"], // 4bp 서열 삽입 (TATC)
-          desc: "HEXA 유전자 11번 엑손의 4bp (TATC) 프레임시프트 삽입 변이 시뮬레이션입니다.\n변이 이후 읽기 틀이 바뀌면서 즉시 조기 종결 코돈이 생성되어 Hexosaminidase A 효소 합성이 중단됩니다."
-        },
         cause: {
           kw: "15번 염색체 HEXA 유전자 변이 / Hexosaminidase A 효소 결핍",
           desc: "15번 염색체(15q23)에 위치한 HEXA 유전자의 돌연변이로 인해 지질 분해 효소인 Hexosaminidase A가 정상적으로 형성되지 않거나 기능이 마비됩니다.\n\n결과적으로 리소좀 내 지질 성분인 'GM2 갱글리오사이드'가 분해되지 못하고 뇌 및 척수의 신경 세포에 과도하게 축적되어 급성 신경계 퇴행을 유발합니다."
@@ -244,11 +220,6 @@
       },
       marfan: {
         title: "마르판 증후군 (Marfan Syndrome)",
-        dnaSeq: {
-          normal: ["ATG", "UAC", "GAC", "GGU", "GAG"],
-          mutated: ["ATG", "UAC", "UAA", "GGU", "GAG"], // 과미스변이 / 과오변이 (GAC -> UAA 종결변이)
-          desc: "FBN1 유전자 점돌연변이(Nonsense Mutation) 시뮬레이션입니다.\n단 하나의 염기 치환으로 정상 아미노산(Asp) 대신 종결 코돈(UAA)이 형성되어 불완전한 단백질이 만들어집니다."
-        },
         cause: {
           kw: "15번 염색체 FBN1 유전자 변이 / 피브릴린-1 단백질 이상",
           desc: "15번 염색체(15q21.1)의 FBN1 유전자 변이로 인해 결합조직의 골격을 형성하는 '피브릴린-1(fibrillin-1)' 단백질이 정상적으로 생성되지 않습니다.\n\n이로 인해 전신 결합조직의 탄성력이 약화되고, TGF-beta 세포 성장 인자가 과도하게 활성화되어 조직 변형이 일어납니다."
@@ -284,11 +255,6 @@
       },
       duchenne: {
         title: "뒤센 근이영양증 (Duchenne Muscular Dystrophy)",
-        dnaSeq: {
-          normal: ["ATG", "CCC", "AAG", "AGA", "UAA"],
-          mutated: ["ATG", "---", "AAG", "AGA", "UAA"], // 엑손 결실(Deletion)
-          desc: "DMD 유전자 특정 엑손 결실(Deletion) 시뮬레이션입니다.\n디스트로핀 유전자의 거대 결실로 인해 근육 세포막 보호 단백질이 완전히 합성되지 못합니다."
-        },
         cause: {
           kw: "X 염색체 DMD 유전자 결함 / 디스트로핀(Dystrophin) 단백질 부재",
           desc: "X 염색체(Xp21.2)에 위치한 DMD 유전자의 결실(약 65%), 중복, 점돌연변이 등으로 인해 근육 세포막을 보호하는 '디스트로핀(Dystrophin)' 단백질이 완전히 생성되지 못합니다.\n\n이로 인해 운동 시 근육 세포가 손상되고 괴사하며 점차 지방 및 결합조직으로 대체됩니다."
@@ -324,11 +290,6 @@
       },
       diGeorge: {
         title: "22q11.2 결실 증후군 (디조지 증후군)",
-        dnaSeq: {
-          normal: ["ATG", "GUC", "CUG", "AAC", "UAG"],
-          mutated: ["---", "---", "---", "---", "---"], // 미세결실(Microdeletion)
-          desc: "22q11.2 영역 약 3Mb 미세결실 시뮬레이션입니다.\nTBX1 유전자를 포함한 수십 개 유전자가 염색체 구간 단위로 손실되어 전사 과정 자체가 차단됩니다."
-        },
         cause: {
           kw: "22번 염색체 22q11.2 영역 미세 결실 (Microdeletion)",
           desc: "22번 염색체 긴 팔(q)의 특정 부위(22q11.2)에서 약 1.5~3Mb 크기의 유전 물질 미세 결실이 발생합니다.\n\n이 부위에 존재하는 TBX1 등 수십 개의 유전자가 손실되면서 배아 발생 단계에서 제3, 제4 인두낭의 발달 장애를 일으킵니다."
@@ -374,41 +335,6 @@
       return text.replace(re, '<span class="highlight">$1</span>');
     }
 
-    // 1번: DNA 시뮬레이터 HTML 생성기
-    function renderDnaSimulator(dnaData) {
-      const renderCodons = (list, isMutated = false) => {
-        return list.map(c => {
-          const aa = codonTable[c] || (c === '---' ? '손실됨' : '아미노산');
-          const isStop = aa.includes('STOP');
-          return `
-            <div class="codon-box ${isMutated ? 'mutated' : ''}">
-              <div class="seq-dna">${c}</div>
-              <div class="seq-aa ${isStop ? 'stop' : ''}">${aa}</div>
-            </div>
-          `;
-        }).join('');
-      };
-
-      return `
-        <div class="dna-sim-card full-width">
-          <div class="card-title" style="color: var(--accent-blue);">
-            <i class="fa-solid fa-code-branch"></i> [분자생물학 시뮬레이션] 유전자 서열 및 번역(Central Dogma) 비교
-          </div>
-          <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 16px;">${dnaData.desc}</p>
-          
-          <div style="margin-bottom: 16px;">
-            <span style="font-size: 0.88rem; font-weight:700; color:var(--accent-green);">■ 정상 유전자 서열 (Normal DNA Sequence)</span>
-            <div class="dna-block-container">${renderCodons(dnaData.normal, false)}</div>
-          </div>
-
-          <div>
-            <span style="font-size: 0.88rem; font-weight:700; color:var(--accent-red);">■ 변이 유전자 서열 (Mutated Sequence)</span>
-            <div class="dna-block-container">${renderCodons(dnaData.mutated, true)}</div>
-          </div>
-        </div>
-      `;
-    }
-
     // 상세 분석 비교표 렌더링
     function renderCompareTable(keyword = '') {
       const compareData = [
@@ -450,6 +376,7 @@
         }
       ];
 
+      // 검색어 필터링
       const filteredData = compareData.filter(item => {
         if (!keyword) return true;
         const allText = (item.name + item.gene + item.inheritance + item.patho + item.symptoms + item.diagnosis + item.treatment).toLowerCase();
@@ -521,8 +448,6 @@
         { title: "5. 치료 및 관리 방법", icon: "fa-kit-medical", data: data.management }
       ];
 
-      let dnaSimHTML = renderDnaSimulator(data.dnaSeq);
-
       let gridCardsHTML = sections.map(sec => `
         <div class="card">
           <div class="card-title"><i class="fa-solid ${sec.icon}"></i> ${sec.title}</div>
@@ -550,7 +475,6 @@
           <div class="card-title" style="margin-bottom:6px;"><i class="fa-solid fa-disease"></i> 탐구 대상 질환</div>
           <div class="card-content" style="font-weight:800; font-size:1.4rem; color: #ffffff;">${applyHighlight(data.title, keyword)}</div>
         </div>
-        ${dnaSimHTML}
         <div class="grid-container">
           ${gridCardsHTML}
           ${sourcesHTML}
@@ -580,13 +504,13 @@
       renderTab(key, query);
     }
 
-    // 실시간 검색
+    // 검색 핸들러 (실시간 반영)
     function handleSearch() {
       const query = document.getElementById('searchInput').value.trim();
       renderTab(currentTab, query);
     }
 
-    // 퀴즈 답안 검증
+    // 퀴즈 정답 확인
     function checkAnswer(qIdx, selected, correct, exp) {
       const resBox = document.getElementById(`q-res-${qIdx}`);
       const decodedExp = decodeURIComponent(exp);
@@ -605,7 +529,7 @@
       }
     }
 
-    // 초기화
+    // 초기 실행
     renderTab('taysachs');
   </script>
 </body>
